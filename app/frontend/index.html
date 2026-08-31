@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Grounded — verified briefings from your notes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand">
+      <h1>Grounded</h1>
+      <span class="tagline">Every claim cited, or marked invented.</span>
+    </div>
+    <nav aria-label="Primary">
+      <button class="tab" id="tab-workspace" aria-current="page">Workspace</button>
+      <button class="tab" id="tab-history">Past briefings</button>
+    </nav>
+  </header>
+
+  <!-- ======================= WORKSPACE ======================= -->
+  <main class="layout" id="view-workspace">
+    <section class="pane" aria-labelledby="notes-heading">
+      <div class="pane-head">
+        <h2 id="notes-heading">Source notes</h2>
+        <span class="badge badge-plain" id="note-count">0 notes</span>
+      </div>
+
+      <div class="pane-body">
+        <form class="composer" id="note-form">
+          <label class="sr-only" for="note-input">Paste or type a note</label>
+          <textarea id="note-input" placeholder="Paste meeting notes, a standup dump, a call summary… Anything the briefing should be grounded in."></textarea>
+          <div class="composer-actions">
+            <button type="submit" class="btn btn-primary">Add note</button>
+            <span class="tagline" id="composer-hint"></span>
+          </div>
+        </form>
+
+        <div class="searchbar">
+          <label class="sr-only" for="note-search">Search notes</label>
+          <input id="note-search" type="search" placeholder="Search notes (full-text)…" />
+          <button class="btn" id="search-clear" type="button">Clear</button>
+        </div>
+
+        <ul class="note-list" id="note-list"></ul>
+      </div>
+
+      <div class="pane-foot">
+        <button class="btn btn-primary btn-block" id="generate-btn">Generate briefing</button>
+        <p class="tagline" id="generate-hint" style="margin:8px 0 0">
+          Uses all notes unless you tick specific ones.
+        </p>
+      </div>
+    </section>
+
+    <section class="pane" aria-labelledby="briefing-heading">
+      <div class="pane-head">
+        <h2 id="briefing-heading">Current briefing</h2>
+        <span class="badge badge-plain" id="briefing-model"></span>
+      </div>
+      <div class="pane-body" id="briefing-body">
+        <div class="empty">
+          <strong>No briefing yet</strong>
+          Add a few notes, then generate. Every bullet will come back either cited
+          to a specific note — with the supporting quote shown — or explicitly
+          marked as invented.
+        </div>
+      </div>
+      <div class="pane-foot">
+        <button class="btn btn-primary btn-block" id="save-btn" disabled>Save briefing</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================= HISTORY ======================= -->
+  <main id="view-history" hidden>
+    <div class="pane">
+      <div class="pane-head"><h2>Past briefings</h2></div>
+      <div class="pane-body">
+        <ul class="history-list" id="history-list"></ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

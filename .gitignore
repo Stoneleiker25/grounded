@@ -8,10 +8,20 @@ __pycache__/
 # Environment / secrets
 .env
 .env.*
+!.env.example
 
-# OS files
+# Databases (local dev)
+grounded.db
+grounded.db-journal
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+
+# Tooling
+.pytest_cache/
+app/frontend/config.js
+
+# Editor / OS
+.obsidian/
 .DS_Store
 Thumbs.db
-
-# SQLite database (local dev)
-grounded.db
