@@ -70,9 +70,11 @@
       </form>
 
       <div class="px-6 py-5">
-        <button class="flex w-full items-center justify-center gap-2 bg-black py-3 text-sm font-bold tracking-wide text-white" disabled>
-          GENERATE BRIEFING
-        </button>
+        <form action="{{ url_for('save_briefing') }}" method="post">
+          <button type="submit" class="flex w-full items-center justify-center gap-2 bg-black py-3 text-sm font-bold tracking-wide text-white">
+            GENERATE BRIEFING
+          </button>
+        </form>
       </div>
     </section>
 
