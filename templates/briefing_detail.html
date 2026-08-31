@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grounded — Briefing Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-white font-sans text-black antialiased">
+
+  <header class="flex items-center justify-between border-b border-black px-4 py-2">
+    <div class="flex items-center gap-3">
+      <a href="{{ url_for('index') }}" class="border border-black bg-white px-4 py-2 text-sm font-medium text-black">
+        Dashboard
+      </a>
+      <a href="{{ url_for('past_briefings') }}" class="border border-black bg-white px-4 py-2 text-sm font-medium text-black">
+        Past Briefings
+      </a>
+    </div>
+    <div class="flex h-9 w-9 items-center justify-center rounded-full border border-black bg-white">
+      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+      </svg>
+    </div>
+  </header>
+
+  <main class="grid min-h-[calc(100vh-53px)] grid-cols-2">
+
+    <section class="flex flex-col border-r border-black">
+      <h1 class="px-6 py-4 text-xl font-bold tracking-wide">BRIEFING {{ briefing.title }}</h1>
+
+      <div class="flex-1 overflow-y-auto px-6 py-2">
+        {% if bullets %}
+          {% for bullet in bullets %}
+          <div class="border-b border-black py-3">
+            <p class="text-sm leading-relaxed">
+              <span class="mr-2">•</span>
+              {% if bullet.tag == 'invented' %}[Invented] {% endif %}
+              {{ bullet.text }}
+            </p>
+            {% if bullet.status %}
+            <p class="mt-2 text-xs font-semibold uppercase tracking-wide">
+              Status: {{ bullet.status }}
+            </p>
+            {% endif %}
+            {% if bullet.notes %}
+            <p class="mt-2 text-xs text-gray-600">Notes: {{ bullet.notes }}</p>
+            {% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="text-sm text-gray-600">No bullets in this briefing.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="flex flex-col">
+      <h1 class="px-6 py-4 text-xl font-bold tracking-wide">BRIEFING HISTORY</h1>
+      <div class="bg-gray-200 px-6 py-2 text-sm font-semibold tracking-wide">APPROVALS / REJECTIONS / NOTES</div>
+
+      <div class="flex-1 overflow-y-auto border-t border-black px-6 py-3">
+        {% if history %}
+          {% for entry in history %}
+          <div class="border-b border-gray-200 py-3 text-sm">
+            <p class="font-semibold uppercase">{{ entry.action }} — {{ entry.table_name }} #{{ entry.record_id }}</p>
+            {% if entry.detail %}
+            <p class="mt-1 text-xs text-gray-700">{{ entry.detail }}</p>
+            {% endif %}
+            {% if entry.status %}
+            <p class="mt-1 text-xs text-gray-600">Status: {{ entry.status }}</p>
+            {% endif %}
+            {% if entry.notes %}
+            <p class="mt-1 text-xs text-gray-600">Notes: {{ entry.notes }}</p>
+            {% endif %}
+            <p class="mt-1 text-xs text-gray-500">{{ entry.created_at }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="py-4 text-sm text-gray-600">No history for this briefing yet.</p>
+        {% endif %}
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
