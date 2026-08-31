@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "fbb978346b1d4f71",
+        "id": "eea310ff11fb520d",
         "type": "tabs",
         "children": [
           {
-            "id": "965b14f8e9dca8b9",
+            "id": "1169f74d3a0d6e01",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "BUILD_LOG.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "BUILD_LOG"
             }
           }
         ]
@@ -95,6 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "BUILD_LOG.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -113,6 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "BUILD_LOG.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
@@ -155,6 +161,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "BUILD_LOG.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
@@ -181,8 +188,20 @@
       "bases:Create new base": false
     }
   },
-  "active": "965b14f8e9dca8b9",
+  "active": "1169f74d3a0d6e01",
   "lastOpenFiles": [
-    "index.html"
+    "README.md",
+    "BUILD_LOG.md",
+    "Notes.md",
+    "templates/briefing_detail.html",
+    "templates/past_briefings.html",
+    "db.py",
+    "start.ps1",
+    "__pycache__/app.cpython-312.pyc",
+    "__pycache__",
+    "templates/index.html",
+    "templates",
+    "requirements.txt",
+    "app.py"
   ]
 }

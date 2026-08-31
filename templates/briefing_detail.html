@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grounded — Briefing #{{ briefing_id }}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-white font-sans text-black antialiased">
+
+  <header class="flex items-center justify-between border-b border-black px-4 py-2">
+    <a href="{{ url_for('past_briefings') }}" class="border border-black bg-white px-4 py-2 text-sm font-medium">
+      Back to Past Briefings
+    </a>
+  </header>
+
+  <main class="mx-auto max-w-3xl px-6 py-6">
+    <h1 class="text-xl font-bold tracking-wide">BRIEFING #{{ briefing_id }}</h1>
+
+    <div class="mt-4 space-y-3">
+      {% for bullet in bullets %}
+      <div class="flex items-start justify-between gap-3 border-b border-gray-200 py-3">
+        <p class="flex-1 text-sm leading-relaxed">
+          <span class="mr-2">•</span>
+          {% if bullet.tag == 'invented' %}[Invented] {% endif %}
+          {% if bullet.flagged %}
+          <span class="underline decoration-red-500 decoration-2">{{ bullet.text }}</span>
+          {% else %}
+          {{ bullet.text }}
+          {% endif %}
+        </p>
+        <span class="shrink-0 border border-black px-2 py-1 text-xs font-semibold uppercase">{{ bullet.status }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </main>
+
+</body>
+</html>

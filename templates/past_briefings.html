@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grounded — Past Briefings</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="min-h-screen bg-white font-sans text-black antialiased">
+
+  <header class="flex items-center justify-between border-b border-black px-4 py-2">
+    <div class="flex items-center gap-3">
+      <a href="{{ url_for('index') }}" class="flex items-center gap-2 border border-black bg-white px-4 py-2 text-sm font-medium">
+        Dashboard
+      </a>
+      <span class="bg-black px-4 py-2 text-sm font-medium text-white">Past Briefings</span>
+    </div>
+    <a href="{{ url_for('index') }}" class="border border-black bg-white px-4 py-2 text-xs font-semibold tracking-wide">
+      BACK TO DASHBOARD
+    </a>
+  </header>
+
+  <main class="grid min-h-[calc(100vh-53px)] grid-cols-2">
+
+    <!-- LEFT: Saved briefings -->
+    <section class="flex flex-col border-r border-black">
+      <h1 class="px-6 py-4 text-xl font-bold tracking-wide">PAST BRIEFINGS</h1>
+
+      <div class="flex-1 overflow-y-auto px-6">
+        {% if briefings %}
+          {% for briefing in briefings %}
+          <a href="{{ url_for('briefing_detail', briefing_id=briefing.id) }}"
+             class="mb-3 block border border-black px-4 py-3 hover:bg-gray-50">
+            <p class="text-sm font-bold">{{ briefing.title }}</p>
+            <p class="mt-1 text-xs text-gray-600">Saved: {{ briefing.saved_at }}</p>
+            <p class="mt-1 text-xs text-gray-500">
+              {{ briefing.approved_count }} approved / {{ briefing.bullet_count }} bullets
+            </p>
+          </a>
+          {% endfor %}
+        {% else %}
+          <p class="text-sm text-gray-600">No saved briefings yet. Save one from the dashboard.</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <!-- RIGHT: History -->
+    <section class="flex flex-col">
+      <h1 class="px-6 py-4 text-xl font-bold tracking-wide">HISTORY</h1>
+      <div class="bg-gray-200 px-6 py-2 text-sm font-semibold tracking-wide">SQL ACTION LOG</div>
+
+      <div class="flex-1 overflow-y-auto border-t border-black px-6 py-2">
+        {% if history %}
+          {% for entry in history %}
+          <div class="border-b border-gray-200 py-3 text-sm">
+            <p class="font-semibold">{{ entry.action | upper }} — {{ entry.table_name }} #{{ entry.record_id }}</p>
+            {% if entry.detail %}
+            <p class="mt-1 text-xs text-gray-700">{{ entry.detail }}</p>
+            {% endif %}
+            <p class="mt-1 text-xs text-gray-500">{{ entry.created_at }}</p>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="py-4 text-sm text-gray-600">No history yet.</p>
+        {% endif %}
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>
