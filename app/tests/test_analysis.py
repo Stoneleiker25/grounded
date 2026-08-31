@@ -67,10 +67,16 @@ class TestGroundednessBudget:
         assert groundedness_budget({}).n_bullets == 0
         assert groundedness_budget({1: "hi"}).n_bullets == 0
 
-    def test_thin_notes_produce_fewer_bullets_and_say_so(self):
+    def test_thin_notes_still_reach_the_floor_but_say_so(self):
+        """The brief asks for 5-8 bullets, so the floor holds even on thin notes.
+        What the notes cannot support comes back marked invented, not padded in."""
         b = groundedness_budget({1: NOTE_1})
-        assert 0 < b.n_bullets < 8
+        assert b.n_bullets == 5
         assert b.coverage_note and "invent" in b.coverage_note.lower()
+
+    def test_any_usable_note_lands_in_the_briefs_range(self):
+        for notes in ({1: NOTE_1}, {1: NOTE_1, 2: NOTE_2}, {i: NOTE_1 for i in range(1, 9)}):
+            assert 5 <= groundedness_budget(notes).n_bullets <= 8
 
     def test_plenty_of_material_reaches_the_target(self):
         notes = {i: NOTE_1 + " " + NOTE_2 for i in range(1, 6)}

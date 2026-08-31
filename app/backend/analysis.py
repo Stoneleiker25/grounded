@@ -167,34 +167,29 @@ class Budget:
 
 
 def groundedness_budget(notes: dict[int, str]) -> Budget:
-    """Decide how many bullets the material can actually support.
+    """Decide how many bullets to ask for.
 
-    The failure mode this prevents: thin or junk notes, model asked for 8 bullets,
-    model obliges by inventing 6. Padding to a fixed count *manufactures* the very
-    thing this product exists to catch, so the count is derived from the input.
+    The brief asks for roughly 5-8 bullets whenever there is usable source material.
+    We do not derive the request count from source-character length: that silently
+    suppresses the model before it can speak. Instead, we use the configured target
+    and floor values and let verification convert unsupported claims into
+    ``invented`` bullets rather than hiding them behind a smaller request count.
     """
     usable = [b for b in notes.values() if len(b.strip()) >= 40]
-    total_chars = sum(len(b.strip()) for b in usable)
-
     if not usable:
         return Budget(0, "No note contained enough text to brief from. Nothing was generated.")
 
-    supported = max(1, total_chars // settings.chars_per_bullet)
-    n = min(settings.target_bullets, supported)
-
-    note = None
+    n = settings.min_bullets if len(usable) <= 1 else settings.target_bullets
     if n < settings.min_bullets:
-        note = (
-            f"Only {n} bullet{'s' if n != 1 else ''} generated: "
-            f"{len(usable)} usable note{'s' if len(usable) != 1 else ''} totalling "
-            f"{total_chars} characters supports roughly that much. "
-            "Padding to a fixed count would mean inventing the difference."
-        )
-    elif n < settings.target_bullets:
-        note = (
-            f"Generated {n} of a possible {settings.target_bullets} bullets — "
-            "the source notes did not support more."
-        )
+        n = settings.min_bullets
+    if n > settings.target_bullets:
+        n = settings.target_bullets
+
+    note = (
+        f"Requested {n} bullets using the configured {settings.min_bullets}-{settings.target_bullets} "
+        "range. Claims unsupported by the notes are still returned as invented rather than "
+        "being silently padded or dropped."
+    )
     return Budget(n, note)
 
 

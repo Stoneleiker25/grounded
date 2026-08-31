@@ -56,6 +56,14 @@ def init_db() -> None:
 
     Base.metadata.create_all(engine)
 
+    # Lightweight forward migration: create_all() never adds a column to a table that
+    # already exists, so an older database would be missing notes.deleted_at and every
+    # query touching it would fail. Idempotent, safe to run on every start.
+    with engine.begin() as conn:
+        cols = {row[1] for row in conn.exec_driver_sql("PRAGMA table_info(notes)")}
+        if cols and "deleted_at" not in cols:
+            conn.exec_driver_sql("ALTER TABLE notes ADD COLUMN deleted_at DATETIME")
+
     # FTS5 index over notes, kept in sync by triggers so it can never drift from
     # the notes table the way an application-managed index would.
     with engine.begin() as conn:

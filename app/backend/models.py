@@ -60,6 +60,13 @@ class Note(Base):
         DateTime, default=utcnow, onupdate=utcnow, nullable=False
     )
 
+    # Notes are SOFT-deleted. A hard delete either destroys the evidence behind a
+    # citation in an existing briefing, or -- because verified_note_id is SET NULL on
+    # delete while provenance stays 'cited' -- trips ck_cited_requires_verified_note
+    # and fails the request outright. Both break the promise that a saved briefing can
+    # be reopened later with its citations intact.
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
+
     __table_args__ = (CheckConstraint("length(trim(body)) > 0", name="ck_note_body_nonempty"),)
 
 

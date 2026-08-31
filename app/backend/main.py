@@ -132,7 +132,12 @@ def health() -> dict:
 
 @app.get("/api/notes", response_model=list[schemas.NoteOut])
 def list_notes(session: Session = Depends(get_session)):
-    return session.query(Note).order_by(Note.created_at.desc()).all()
+    return (
+        session.query(Note)
+        .filter(Note.deleted_at.is_(None))
+        .order_by(Note.created_at.desc())
+        .all()
+    )
 
 
 @app.post("/api/notes", response_model=schemas.NoteOut, status_code=201)
@@ -154,10 +159,12 @@ def _derive_title(body: str) -> str:
 
 @app.delete("/api/notes/{note_id}", status_code=204)
 def delete_note(note_id: int, session: Session = Depends(get_session)):
+    """Soft delete. The note leaves the workspace but stays readable by any briefing
+    that already cited it -- see the comment on Note.deleted_at."""
     note = session.get(Note, note_id)
-    if note is None:
+    if note is None or note.deleted_at is not None:
         raise HTTPException(404, "Note not found")
-    session.delete(note)
+    note.deleted_at = utcnow()
 
 
 @app.get("/api/notes/search", response_model=list[schemas.NoteOut])
@@ -175,7 +182,11 @@ def search_notes(q: str = Query(min_length=1), session: Session = Depends(get_se
     ).scalars().all()
     if not rows:
         return []
-    notes = session.query(Note).filter(Note.id.in_(rows)).all()
+    notes = (
+        session.query(Note)
+        .filter(Note.id.in_(rows), Note.deleted_at.is_(None))
+        .all()
+    )
     order = {nid: i for i, nid in enumerate(rows)}
     return sorted(notes, key=lambda n: order[n.id])
 
@@ -200,7 +211,8 @@ def list_briefings(session: Session = Depends(get_session)):
     return [
         schemas.BriefingSummary(
             id=b.id, title=b.title, status=b.status,
-            created_at=b.created_at, saved_at=b.saved_at, stats=generation_stats(b),
+            created_at=b.created_at, saved_at=b.saved_at,
+            note_count=len(b.sources), stats=generation_stats(b),
         )
         for b in briefings
     ]

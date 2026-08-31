@@ -78,17 +78,56 @@ $restoreOutput = @(); $serverLines = @(); $redFlags = @()
 $restoreStatus = "OK"; $startStatus = "OK"; $healthStatus = "SKIPPED"
 $overallStatus = "OK"; $healthDetail = "Not run"
 
-function Assert-PortFree([int]$Port, [string]$Label) {
-    if (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
-        Write-Host "Port $Port ($Label) is already in use." -ForegroundColor Red
-        Write-Host "Stop the other process, or re-run with a different port:" -ForegroundColor Yellow
-        Write-Host "    .\start.ps1 -ApiPort 8001 -WebPort 5174" -ForegroundColor Yellow
-        $script:redFlags += "port in use"
-        Write-BuildLog "FAILED" $script:restoreStatus "PORT IN USE" "SKIPPED" `
-            "Port $Port ($Label) already in use" $script:restoreOutput `
-            @("Port $Port ($Label) is already in use.") $script:redFlags
-        exit 1
+function Stop-ProcessTree([int]$ProcessId) {
+    # uvicorn --reload runs a supervisor that spawns a worker child. Stop-Process on the
+    # supervisor alone leaves the worker holding the socket, which is how a "stopped"
+    # server keeps occupying its port. taskkill /T kills the whole tree.
+    & taskkill.exe /PID $ProcessId /T /F 2>&1 | Out-Null
+}
+
+function Get-PortOwner([int]$Port) {
+    $conn = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+    if (-not $conn) { return $null }
+    return Get-Process -Id $conn.OwningProcess -ErrorAction SilentlyContinue
+}
+
+function Resolve-Port([int]$Port, [string]$Label) {
+    <#
+      Never fail just because a port is busy. Three cases:
+        1. Free                      -> use it.
+        2. Held by OUR OWN venv python (a server this script started and left behind)
+                                     -> reclaim it, since that process is ours to stop.
+        3. Held by something else    -> step to the next free port and say so.
+    #>
+    $owner = Get-PortOwner $Port
+    if (-not $owner) { return $Port }
+
+    $ourPython = Join-Path $Root ".venv"
+    if ($owner.Path -and $owner.Path.StartsWith($ourPython, [StringComparison]::OrdinalIgnoreCase)) {
+        Write-Host "  Port $Port held by a previous Grounded server (PID $($owner.Id)) - reclaiming." -ForegroundColor Yellow
+        Stop-ProcessTree $owner.Id
+        Start-Sleep -Milliseconds 900
+        if (-not (Get-PortOwner $Port)) {
+            $script:redFlags += "reclaimed stale port"
+            return $Port
+        }
     }
+
+    for ($p = $Port + 1; $p -lt $Port + 40; $p++) {
+        if (-not (Get-PortOwner $p)) {
+            Write-Host "  Port $Port ($Label) is in use by '$($owner.ProcessName)' - using $p instead." -ForegroundColor Yellow
+            $script:redFlags += "port in use (moved to $p)"
+            return $p
+        }
+    }
+
+    Write-Host "No free $Label port near $Port." -ForegroundColor Red
+    $script:redFlags += "no free port"
+    Write-BuildLog "FAILED" $script:restoreStatus "NO FREE PORT" "SKIPPED" `
+        "No free $Label port in $Port..$($Port+40)" $script:restoreOutput `
+        @("No free $Label port near $Port.") $script:redFlags
+    exit 1
 }
 
 if (-not (Test-Path ".venv")) {
@@ -125,16 +164,22 @@ if (-not (Select-String -Path ".env" -Pattern "^GROUNDED_ANTHROPIC_API_KEY=sk-" 
     exit 1
 }
 
-Assert-PortFree $ApiPort "API"
-Assert-PortFree $WebPort "frontend"
+# Resolve ports BEFORE writing config.js, so the frontend always points at the API
+# port actually in use. Getting this order wrong is what produces "Failed to fetch".
+$ApiPort = Resolve-Port $ApiPort "API"
+$WebPort = Resolve-Port $WebPort "frontend"
 
 # The frontend reads the API base from this generated file, so changing -ApiPort
 # does not require editing any source.
 Set-Content -Path "app\frontend\config.js" `
     -Value "window.GROUNDED_API = 'http://127.0.0.1:$ApiPort';"
 
+# --reload so editing anything under app\backend restarts the API automatically.
+# Without it, uvicorn keeps the old module in memory and code changes appear to have
+# no effect -- which reads exactly like "the fix didn't work".
+# --reload-dir keeps the watcher off .venv, which is large and never changes.
 $api = Start-Process -FilePath $Py `
-    -ArgumentList "-m","uvicorn","app.backend.main:app","--host","127.0.0.1","--port","$ApiPort" `
+    -ArgumentList "-m","uvicorn","app.backend.main:app","--host","127.0.0.1","--port","$ApiPort","--reload","--reload-dir","app" `
     -WorkingDirectory $Root -PassThru -WindowStyle Hidden `
     -RedirectStandardOutput "$env:TEMP\grounded-api.log" `
     -RedirectStandardError  "$env:TEMP\grounded-api.err"
@@ -161,7 +206,7 @@ if (-not $ready) {
     $serverLines | Select-Object -Last 25 | ForEach-Object { Write-Host "  $_" }
     Write-BuildLog $overallStatus $restoreStatus $startStatus $healthStatus `
         $healthDetail $restoreOutput $serverLines $redFlags
-    if (-not $api.HasExited) { Stop-Process -Id $api.Id -Force }
+    if (-not $api.HasExited) { Stop-ProcessTree $api.Id }
     exit 1
 }
 $healthStatus = "OK"; $healthDetail = "HTTP 200 from /api/health"
@@ -176,7 +221,7 @@ $web = Start-Process -FilePath $Py `
 Write-Host ""
 Write-Host "  Grounded is running:  http://127.0.0.1:$WebPort" -ForegroundColor Green
 Write-Host "  API docs:             http://127.0.0.1:$ApiPort/docs" -ForegroundColor DarkGray
-Write-Host "  Ctrl+C to stop." -ForegroundColor DarkGray
+Write-Host "  Backend auto-reloads on save. Ctrl+C to stop." -ForegroundColor DarkGray
 Write-Host ""
 Start-Process "http://127.0.0.1:$WebPort"
 
@@ -184,7 +229,13 @@ try {
     Wait-Process -Id $api.Id
 } finally {
     foreach ($p in @($api, $web)) {
-        if ($p -and -not $p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue }
+        if ($p -and -not $p.HasExited) { Stop-ProcessTree $p.Id }
+    }
+    # Belt and braces: if anything is still listening on our ports, take it down too,
+    # so the next run never has to hop to a different port.
+    foreach ($port in @($ApiPort, $WebPort)) {
+        $leftover = Get-PortOwner $port
+        if ($leftover) { Stop-ProcessTree $leftover.Id }
     }
     Write-Host "Stopped." -ForegroundColor DarkGray
 }

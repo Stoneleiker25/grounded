@@ -35,7 +35,6 @@
           <textarea id="note-input" placeholder="Paste meeting notes, a standup dump, a call summary… Anything the briefing should be grounded in."></textarea>
           <div class="composer-actions">
             <button type="submit" class="btn btn-primary">Add note</button>
-            <span class="tagline" id="composer-hint"></span>
           </div>
         </form>
 
@@ -59,7 +58,6 @@
     <section class="pane" aria-labelledby="briefing-heading">
       <div class="pane-head">
         <h2 id="briefing-heading">Current briefing</h2>
-        <span class="badge badge-plain" id="briefing-model"></span>
       </div>
       <div class="pane-body" id="briefing-body">
         <div class="empty">
@@ -80,7 +78,7 @@
     <div class="pane">
       <div class="pane-head"><h2>Past briefings</h2></div>
       <div class="pane-body">
-        <ul class="history-list" id="history-list"></ul>
+        <div class="history-tree" id="history-list"></div>
       </div>
     </div>
   </main>

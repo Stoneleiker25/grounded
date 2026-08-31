@@ -156,3 +156,79 @@ class TestDatabaseInvariants:
                     sqlalchemy.text("UPDATE bullets SET status = 'banana' WHERE id = :i"),
                     {"i": bullet_id},
                 )
+
+
+class TestNoteDeletion:
+    """Regression: deleting a note must never damage a briefing that cites it.
+
+    The original hard delete set bullets.verified_note_id to NULL while provenance
+    stayed 'cited', which tripped ck_cited_requires_verified_note and returned a 500 --
+    and without that constraint would have silently destroyed the citation instead.
+    """
+
+    def test_deleting_a_cited_note_leaves_the_briefing_intact(self, client):
+        d = client.post("/api/briefings/generate", json={}).json()
+        bid = d["id"]
+        cited = [b for b in d["bullets"] if b["provenance"] == "cited"]
+        assert cited, "need at least one cited bullet to make this meaningful"
+        note_id = cited[0]["citation"]["note_id"]
+
+        client.patch(f"/api/bullets/{cited[0]['id']}/status", json={"status": "accepted"})
+        assert client.delete(f"/api/notes/{note_id}").status_code == 204
+
+        reopened = client.get(f"/api/briefings/{bid}")
+        assert reopened.status_code == 200
+        j = reopened.json()
+        assert note_id in [s["note_id"] for s in j["sources"]], "source snapshot was lost"
+        still = next(b for b in j["bullets"] if b["id"] == cited[0]["id"])
+        assert still["provenance"] == "cited"
+        assert still["citation"] is not None and still["citation"]["quote"].strip()
+        assert still["status"] == "accepted", "human decision was lost"
+
+    def test_deleted_note_leaves_the_workspace(self, client):
+        note_id = client.post("/api/notes", json={"body": "ephemeral note " * 5}).json()["id"]
+        client.delete(f"/api/notes/{note_id}")
+        assert note_id not in [n["id"] for n in client.get("/api/notes").json()]
+        assert note_id not in [
+            n["id"] for n in client.get("/api/notes/search", params={"q": "ephemeral"}).json()
+        ]
+        assert client.delete(f"/api/notes/{note_id}").status_code == 404
+
+    def test_deleted_note_is_not_used_for_new_briefings(self, client):
+        note_id = client.post("/api/notes", json={"body": "zebracorn quarterly " * 6}).json()["id"]
+        client.delete(f"/api/notes/{note_id}")
+        d = client.post("/api/briefings/generate", json={}).json()
+        assert note_id not in [s["note_id"] for s in d["sources"]]
+
+
+class TestHistoryPayload:
+    """The Past-briefings tree groups by year/month/week/day entirely client-side,
+    so it depends on two things the API must guarantee."""
+
+    def test_timestamps_are_explicit_utc(self):
+        """Naive timestamps are read by JavaScript as LOCAL time, which shifts every
+        value by the viewer's offset and files late-evening briefings under the wrong
+        day. Every timestamp must carry an offset."""
+        with TestClient(app) as c:
+            c.post("/api/notes", json={"body": NOTES[0]})
+            d = c.post("/api/briefings/generate", json={}).json()
+            saved = c.post(f"/api/briefings/{d['id']}/save", json={}).json()
+
+            assert saved["created_at"].endswith("+00:00"), saved["created_at"]
+            assert saved["saved_at"].endswith("+00:00"), saved["saved_at"]
+            for row in c.get("/api/briefings").json():
+                assert row["created_at"].endswith("+00:00")
+                if row["saved_at"]:
+                    assert row["saved_at"].endswith("+00:00")
+
+    def test_summary_carries_the_counts_the_tree_displays(self):
+        with TestClient(app) as c:
+            c.post("/api/notes", json={"body": NOTES[1]})
+            d = c.post("/api/briefings/generate", json={}).json()
+            c.patch(f"/api/bullets/{d['bullets'][0]['id']}/status", json={"status": "accepted"})
+
+            row = next(r for r in c.get("/api/briefings").json() if r["id"] == d["id"])
+            assert row["note_count"] >= 1
+            for key in ("accepted", "rejected", "pending", "cited", "invented"):
+                assert key in row["stats"], f"tree needs stats.{key}"
+            assert row["stats"]["accepted"] == 1

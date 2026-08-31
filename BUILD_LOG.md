@@ -228,3 +228,872 @@ INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
 
 </details>
 
+---
+
+### 2026-08-31 03:13:33 | Session 20260831-031333
+
+| Step | Status |
+|------|--------|
+| **Overall** | FAILED |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | PORT IN USE |
+| Health check (`GET /api/health`) | SKIPPED |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5173`  
+**API:** `http://127.0.0.1:8000`  
+**Health detail:** Port 8000 (API) already in use  
+**Logged:** 2026-08-31 03:13:36  
+
+RED FLAGS: port in use
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+Port 8000 (API) is already in use.
+```
+
+</details>
+
+---
+
+### 2026-08-31 03:13:45 | Session 20260831-031345
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5174`  
+**API:** `http://127.0.0.1:8001`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 03:13:49  
+
+No red flags detected.
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:62734 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Started server process [26908]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+```
+
+</details>
+
+---
+
+### 2026-08-31 03:31:08 | Session 20260831-033108
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5173`  
+**API:** `http://127.0.0.1:8000`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 03:31:13  
+
+No red flags detected.
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:54006 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [47080] using WatchFiles
+INFO:     Started server process [33160]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 04:07:19 | Session 20260831-040719
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5174`  
+**API:** `http://127.0.0.1:8001`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 04:07:24  
+
+No red flags detected.
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:54067 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [26556] using WatchFiles
+INFO:     Started server process [41056]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 04:54:13 | Session 20260831-045413
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5174`  
+**API:** `http://127.0.0.1:8002`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 04:54:19  
+
+RED FLAGS: port in use (moved to 8002), port in use (moved to 5174)
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:50902 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8002 (Press CTRL+C to quit)
+INFO:     Started reloader process [40272] using WatchFiles
+INFO:     Started server process [30260]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 04:56:01 | Session 20260831-045601
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5175`  
+**API:** `http://127.0.0.1:8003`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 04:56:07  
+
+RED FLAGS: port in use (moved to 8003), port in use (moved to 5175)
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:58487 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
+INFO:     Started reloader process [504] using WatchFiles
+INFO:     Started server process [36456]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 05:02:39 | Session 20260831-050239
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5176`  
+**API:** `http://127.0.0.1:8004`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 05:02:45  
+
+RED FLAGS: port in use (moved to 8004), port in use (moved to 5176)
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:53464 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8004 (Press CTRL+C to quit)
+INFO:     Started reloader process [34204] using WatchFiles
+INFO:     Started server process [28404]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 05:03:49 | Session 20260831-050349
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5176`  
+**API:** `http://127.0.0.1:8003`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 05:03:54  
+
+RED FLAGS: port in use (moved to 8003), port in use (moved to 5176)
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+                                                                                                                                                                                                                                                                                                                                                                                                                                                      INFO:     127.0.0.1:54947 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
+INFO:     Started reloader process [43096] using WatchFiles
+```
+
+</details>
+
+---
+
+### 2026-08-31 05:05:06 | Session 20260831-050506
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5173`  
+**API:** `http://127.0.0.1:8000`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 05:05:11  
+
+No red flags detected.
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:55114 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [22020] using WatchFiles
+INFO:     Started server process [5532]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 05:11:30 | Session 20260831-051130
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5173`  
+**API:** `http://127.0.0.1:8000`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 05:11:35  
+
+No red flags detected.
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:57451 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [43428] using WatchFiles
+INFO:     Started server process [43392]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+
+---
+
+### 2026-08-31 05:23:35 | Session 20260831-052335
+
+| Step | Status |
+|------|--------|
+| **Overall** | OK |
+| Restore (`pip install`) | OK |
+| Start live (`uvicorn`) | OK |
+| Health check (`GET /api/health`) | OK |
+
+**Stack:** FastAPI + vanilla JS  
+**URL:** `http://127.0.0.1:5174`  
+**API:** `http://127.0.0.1:8001`  
+**Health detail:** HTTP 200 from /api/health  
+**Logged:** 2026-08-31 05:23:41  
+
+RED FLAGS: port in use (moved to 8001), port in use (moved to 5174)
+
+<details>
+<summary>Restore output</summary>
+
+```
+Requirement already satisfied: fastapi==0.141.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 1)) (0.141.1)
+Requirement already satisfied: uvicorn==0.46.0 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.46.0)
+Requirement already satisfied: SQLAlchemy==2.0.52 in .\.venv\Lib\site-packages (from -r requirements.txt (line 3)) (2.0.52)
+Requirement already satisfied: pydantic==2.13.3 in .\.venv\Lib\site-packages (from -r requirements.txt (line 4)) (2.13.3)
+Requirement already satisfied: pydantic-settings==2.14.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 5)) (2.14.0)
+Requirement already satisfied: anthropic==1.2.0 in .\.venv\Lib\site-packages (from -r requirements.txt (line 6)) (1.2.0)
+Requirement already satisfied: rapidfuzz==3.14.6 in .\.venv\Lib\site-packages (from -r requirements.txt (line 7)) (3.14.6)
+Requirement already satisfied: python-dotenv==1.2.2 in .\.venv\Lib\site-packages (from -r requirements.txt (line 8)) (1.2.2)
+Requirement already satisfied: httpx==0.28.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 9)) (0.28.1)
+Requirement already satisfied: pytest==9.1.1 in .\.venv\Lib\site-packages (from -r requirements.txt (line 10)) (9.1.1)
+Requirement already satisfied: starlette>=0.46.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (1.6.0)
+Requirement already satisfied: typing-extensions>=4.8.0 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.4.4)
+Requirement already satisfied: annotated-doc>=0.0.2 in .\.venv\Lib\site-packages (from fastapi==0.141.1->-r requirements.txt (line 1)) (0.0.5)
+Requirement already satisfied: click>=7.0 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (8.5.0)
+Requirement already satisfied: h11>=0.8 in .\.venv\Lib\site-packages (from uvicorn==0.46.0->uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.16.0)
+Requirement already satisfied: greenlet>=1 in .\.venv\Lib\site-packages (from SQLAlchemy==2.0.52->-r requirements.txt (line 3)) (3.5.5)
+Requirement already satisfied: annotated-types>=0.6.0 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.3 in .\.venv\Lib\site-packages (from pydantic==2.13.3->-r requirements.txt (line 4)) (2.46.3)
+Requirement already satisfied: anyio<5,>=3.5.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (4.14.2)
+Requirement already satisfied: docstring-parser<1,>=0.15 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.18.0)
+Requirement already satisfied: httpx2<3,>=2.0.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: jiter<1,>=0.4.0 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (0.16.0)
+Requirement already satisfied: sniffio<2,>=1 in .\.venv\Lib\site-packages (from anthropic==1.2.0->-r requirements.txt (line 6)) (1.3.1)
+Requirement already satisfied: certifi in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (2026.7.22)
+Requirement already satisfied: httpcore==1.* in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (1.0.9)
+Requirement already satisfied: idna in .\.venv\Lib\site-packages (from httpx==0.28.1->-r requirements.txt (line 9)) (3.19)
+Requirement already satisfied: colorama>=0.4 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (0.4.6)
+Requirement already satisfied: iniconfig>=1.0.1 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.3.0)
+Requirement already satisfied: packaging>=22 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (26.3)
+Requirement already satisfied: pluggy<2,>=1.5 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in .\.venv\Lib\site-packages (from pytest==9.1.1->-r requirements.txt (line 10)) (2.21.0)
+Requirement already satisfied: httptools>=0.6.3 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (0.8.0)
+Requirement already satisfied: pyyaml>=5.1 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (6.0.3)
+Requirement already satisfied: watchfiles>=0.20 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (1.2.0)
+Requirement already satisfied: websockets>=10.4 in .\.venv\Lib\site-packages (from uvicorn[standard]==0.46.0->-r requirements.txt (line 2)) (17.1)
+Requirement already satisfied: httpcore2==2.12.0 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (2.12.0)
+Requirement already satisfied: truststore>=0.10 in .\.venv\Lib\site-packages (from httpx2<3,>=2.0.0->anthropic==1.2.0->-r requirements.txt (line 6)) (0.10.4)
+```
+
+</details>
+
+<details>
+<summary>Server output</summary>
+
+```
+INFO:     127.0.0.1:57631 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     Will watch for changes in these directories: ['C:\\Users\\stone\\OneDrive\\Desktop\\grounded\\app']
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [25956] using WatchFiles
+INFO:     Started server process [34560]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+```
+
+</details>
+

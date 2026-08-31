@@ -41,6 +41,11 @@
 
 * { box-sizing: border-box; }
 
+/* The [hidden] attribute only sets display:none in the UA stylesheet, so ANY author
+   rule that sets display (e.g. .layout { display: grid }) silently overrides it and
+   the "hidden" element keeps rendering. This is the guard. */
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   font-family: var(--sans);
@@ -273,12 +278,69 @@ mark.quote-hit {
 
 /* ------------------------------------------------------------------- history */
 
-.history-list { list-style: none; margin: 0; padding: 0; border: 1.5px solid var(--rule); }
-.history-item {
-  display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4);
-  padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--rule-soft);
-  width: 100%; background: none; border-left: 0; border-right: 0; border-top: 0;
-  text-align: left; cursor: pointer;
+.history-tree { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.tree-summary {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3); flex-wrap: wrap;
+  border: 2px solid var(--rule); padding: var(--sp-3) var(--sp-4);
+  margin-bottom: var(--sp-2);
 }
-.history-item:last-child { border-bottom: 0; }
+
+.tree-node { border: 1.5px solid var(--rule); background: var(--paper); }
+.tree-node > summary {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--sp-3); flex-wrap: wrap;
+  padding: var(--sp-2) var(--sp-3); cursor: pointer;
+  list-style: none; user-select: none;
+}
+.tree-node > summary::-webkit-details-marker { display: none; }
+.tree-node > summary::before {
+  content: "▸"; font-size: 11px; margin-right: var(--sp-2); flex-shrink: 0;
+  transition: transform 0.12s ease;
+}
+.tree-node[open] > summary::before { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) {
+  .tree-node > summary::before { transition: none; }
+}
+.tree-node > summary:hover { background: var(--paper-2); }
+.tree-label { font-weight: 700; flex: 1 1 auto; min-width: 0; }
+
+/* Each level steps down in weight and indent, so depth is readable at a glance. */
+.tree-d0 { border-width: 2px; }
+.tree-d0 > summary { font-size: 16px; background: var(--paper-2); }
+.tree-d1 > summary { font-size: 14px; }
+.tree-d2 > summary { font-size: 13px; }
+.tree-d3 > summary { font-size: 13px; color: var(--ink-2); }
+.tree-d1, .tree-d2, .tree-d3 { border-width: 0 0 1px 0; border-color: var(--rule-soft); }
+.tree-node .tree-children { padding-left: var(--sp-4); }
+.tree-d0 > .tree-children { border-top: 1.5px solid var(--rule); padding-left: var(--sp-3); }
+
+.tree-totals { display: flex; flex-wrap: wrap; gap: var(--sp-1); flex-shrink: 0; }
+.chip {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  border: 1px solid var(--rule-soft); padding: 1px var(--sp-2); color: var(--ink-2);
+  white-space: nowrap;
+}
+.chip b { font-family: var(--mono); color: var(--ink); }
+.chip-approved { border-color: var(--cited); color: var(--cited); }
+.chip-approved b { color: var(--cited); }
+.chip-rejected { border-color: var(--alert); color: var(--alert); }
+.chip-rejected b { color: var(--alert); }
+.chip-briefings, .chip-notes { border-color: var(--rule-soft); }
+
+.tree-leaf { list-style: none; margin: 0; padding: 0; }
+.history-item {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: var(--sp-3); flex-wrap: wrap;
+  padding: var(--sp-2) var(--sp-3); border: 0; border-bottom: 1px solid var(--rule-soft);
+  width: 100%; background: none; text-align: left; cursor: pointer;
+}
+.tree-leaf li:last-child .history-item { border-bottom: 0; }
 .history-item:hover { background: var(--paper-2); }
+.hist-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 200px; }
+
+@media (max-width: 700px) {
+  .tree-node > summary, .history-item { align-items: flex-start; }
+  .tree-totals { width: 100%; }
+}

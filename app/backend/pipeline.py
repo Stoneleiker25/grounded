@@ -24,7 +24,7 @@ class GenerationError(RuntimeError):
 
 
 def generate_briefing(session: Session, note_ids: list[int] | None = None) -> Briefing:
-    query = session.query(Note)
+    query = session.query(Note).filter(Note.deleted_at.is_(None))
     if note_ids:
         query = query.filter(Note.id.in_(note_ids))
     notes = query.order_by(Note.created_at).all()

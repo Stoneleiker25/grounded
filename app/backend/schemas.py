@@ -1,9 +1,26 @@
 """Pydantic request/response models — the API contract."""
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import datetime, timezone
+from typing import Annotated
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, PlainSerializer
+
+
+def _as_utc(dt: datetime) -> str:
+    """Serialise timestamps as unambiguous UTC.
+
+    The DB columns are naive and hold UTC. Emitting them bare (2026-08-31T08:25:07)
+    makes JavaScript's Date() read them as LOCAL time, shifting every value by the
+    viewer's offset -- enough to file a briefing under the wrong day in the history
+    tree. Tag them explicitly so the client cannot guess wrong.
+    """
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc).isoformat()
+
+
+UtcDatetime = Annotated[datetime, PlainSerializer(_as_utc, return_type=str)]
 
 
 class NoteIn(BaseModel):
@@ -16,7 +33,7 @@ class NoteOut(BaseModel):
     id: int
     title: str
     body: str
-    created_at: datetime
+    created_at: UtcDatetime
 
 
 class BulletEventOut(BaseModel):
@@ -28,7 +45,7 @@ class BulletEventOut(BaseModel):
     from_text: str | None
     to_text: str | None
     detail: str | None
-    created_at: datetime
+    created_at: UtcDatetime
 
 
 class CitationOut(BaseModel):
@@ -82,8 +99,8 @@ class BriefingOut(BaseModel):
     status: str
     coverage_note: str | None
     model_name: str | None
-    created_at: datetime
-    saved_at: datetime | None
+    created_at: UtcDatetime
+    saved_at: UtcDatetime | None
     stats: dict
     bullets: list[BulletOut]
     sources: list[BriefingSourceOut]
@@ -94,8 +111,9 @@ class BriefingSummary(BaseModel):
     id: int
     title: str
     status: str
-    created_at: datetime
-    saved_at: datetime | None
+    created_at: UtcDatetime
+    saved_at: UtcDatetime | None
+    note_count: int
     stats: dict
 
 

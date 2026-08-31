@@ -11,6 +11,32 @@
             "id": "1169f74d3a0d6e01",
             "type": "leaf",
             "state": {
+              "type": "image",
+              "state": {
+                "file": "Wireframe.jpg"
+              },
+              "icon": "lucide-image",
+              "title": "Wireframe"
+            }
+          },
+          {
+            "id": "01265e36a9c49c2e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Root Cause.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Root Cause"
+            }
+          },
+          {
+            "id": "0bd65661f8b3432b",
+            "type": "leaf",
+            "state": {
               "type": "markdown",
               "state": {
                 "file": "README.md",
@@ -21,7 +47,8 @@
               "title": "README"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -188,23 +215,25 @@
       "bases:Create new base": false
     }
   },
-  "active": "1169f74d3a0d6e01",
+  "active": "0bd65661f8b3432b",
   "lastOpenFiles": [
+    "Wireframe.jpg",
+    "Draft Readme.md",
+    "app/tests/__pycache__/test_analysis.cpython-312-pytest-9.1.1.pyc",
+    "app/tests/__pycache__/__init__.cpython-312.pyc",
+    "app/tests/__pycache__/conftest.cpython-312-pytest-9.1.1.pyc",
+    "app/tests/__pycache__",
+    "README.md",
+    "Root Cause.md",
     "grounded.sqlite3-shm",
     "grounded.sqlite3-wal",
-    "grounded.sqlite3",
-    "app/backend/__pycache__/llm.cpython-312.pyc",
-    "app/backend/__pycache__/verification.cpython-312.pyc",
-    "app/backend/__pycache__/pipeline.cpython-312.pyc",
-    "app/backend/__pycache__/models.cpython-312.pyc",
-    "app/backend/__pycache__/database.cpython-312.pyc",
-    "app/backend/__pycache__/schemas.cpython-312.pyc",
-    "app/backend/__pycache__/config.cpython-312.pyc",
-    "app/backend/__pycache__/analysis.cpython-312.pyc",
+    "Agent.py",
+    "Scanner Detection.py",
+    "app/backend/__pycache__/config.cpython-312.pyc.1569129733680",
     "Notes.md",
     "BUILD_LOG.md",
-    "v2/README.md",
-    "Wireframe.jpg",
-    "README.md"
+    "app/tests/test_llm.py",
+    "JAMES_LOCAL_TUTORIAL.md",
+    "v2/README.md"
   ]
 }

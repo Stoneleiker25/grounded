@@ -234,7 +234,6 @@ function renderBriefing() {
   const body = $("briefing-body");
   const b = state.briefing;
   $("save-btn").disabled = !b || b.status === "saved";
-  $("briefing-model").textContent = b?.model_name ? `model: ${b.model_name}` : "";
 
   if (!b) {
     body.innerHTML = `
@@ -264,24 +263,183 @@ function renderBriefing() {
 
 // ------------------------------------------------------------------- history
 
+// ---------------------------------------------------------- history (grouped)
+
+/* Past briefings are grouped Year > Month > Week > Day.
+   Counts roll UP: a year shows the totals of everything beneath it, so you can see
+   "how much did I approve in August" without expanding anything. Timestamps arrive
+   as explicit UTC and are rendered in the viewer's local zone. */
+
+const DAY_FMT   = { weekday: "long", month: "short", day: "numeric" };
+const MONTH_FMT = { month: "long" };
+
+function startOfWeek(d) {
+  const x = new Date(d);
+  x.setHours(0, 0, 0, 0);
+  x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); // Monday
+  return x;
+}
+
+function weekLabel(d) {
+  const s = startOfWeek(d);
+  const e = new Date(s); e.setDate(s.getDate() + 6);
+  const f = (x) => x.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return `Week of ${f(s)} – ${f(e)}`;
+}
+
+function emptyTotals() {
+  return { briefings: 0, accepted: 0, rejected: 0, pending: 0, cited: 0, invented: 0, notes: 0 };
+}
+
+function addTotals(t, b) {
+  t.briefings += 1;
+  t.accepted += b.stats.accepted || 0;
+  t.rejected += b.stats.rejected || 0;
+  t.pending  += b.stats.pending  || 0;
+  t.cited    += b.stats.cited    || 0;
+  t.invented += b.stats.invented || 0;
+  t.notes    += b.note_count     || 0;
+  return t;
+}
+
+function groupBriefings(items) {
+  const years = new Map();
+  for (const b of items) {
+    // saved_at is the decision date; fall back to creation for unsaved drafts.
+    const d = new Date(b.saved_at || b.created_at);
+    if (Number.isNaN(d.getTime())) continue;
+
+    const yKey = String(d.getFullYear());
+    const mKey = `${yKey}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    const wKey = startOfWeek(d).toISOString().slice(0, 10);
+    const dKey = `${mKey}-${String(d.getDate()).padStart(2, "0")}`;
+
+    if (!years.has(yKey))
+      years.set(yKey, { label: yKey, totals: emptyTotals(), children: new Map() });
+    const year = years.get(yKey);
+    addTotals(year.totals, b);
+
+    if (!year.children.has(mKey))
+      year.children.set(mKey, {
+        label: d.toLocaleDateString(undefined, MONTH_FMT),
+        totals: emptyTotals(), children: new Map(), sort: d.getMonth(),
+      });
+    const month = year.children.get(mKey);
+    addTotals(month.totals, b);
+
+    if (!month.children.has(wKey))
+      month.children.set(wKey, {
+        label: weekLabel(d), totals: emptyTotals(), children: new Map(), sort: wKey,
+      });
+    const week = month.children.get(wKey);
+    addTotals(week.totals, b);
+
+    if (!week.children.has(dKey))
+      week.children.set(dKey, {
+        label: d.toLocaleDateString(undefined, DAY_FMT),
+        totals: emptyTotals(), items: [], sort: d.getDate(),
+      });
+    const day = week.children.get(dKey);
+    addTotals(day.totals, b);
+    day.items.push(b);
+  }
+  return years;
+}
+
+function totalsChips(t) {
+  const chips = [
+    ["briefings", t.briefings],
+    ["notes", t.notes],
+    ["approved", t.accepted],
+    ["rejected", t.rejected],
+  ];
+  if (t.pending) chips.push(["pending", t.pending]);
+  return `<span class="tree-totals">${chips
+    .map(([k, v]) => `<span class="chip chip-${k}">${k} <b>${v}</b></span>`)
+    .join("")}</span>`;
+}
+
+function briefingRow(b) {
+  const when = new Date(b.saved_at || b.created_at)
+    .toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+  return `
+    <li>
+      <button class="history-item" data-open="${b.id}">
+        <span class="hist-main">
+          <strong>${esc(b.title)}</strong>
+          <span class="tagline">
+            ${when} · ${b.note_count} note${b.note_count === 1 ? "" : "s"} ·
+            ${b.stats.cited} cited · ${b.stats.invented} invented
+          </span>
+        </span>
+        <span class="tree-totals">
+          <span class="chip chip-approved">approved <b>${b.stats.accepted}</b></span>
+          <span class="chip chip-rejected">rejected <b>${b.stats.rejected}</b></span>
+          <span class="chip">${b.status}</span>
+        </span>
+      </button>
+    </li>`;
+}
+
+function nodeHtml(node, depth, openPath) {
+  const isOpen = openPath.includes(node.key) ? " open" : "";
+  const inner = node.items
+    ? `<ul class="tree-leaf">${node.items
+        .sort((a, c) => new Date(c.saved_at || c.created_at) - new Date(a.saved_at || a.created_at))
+        .map(briefingRow).join("")}</ul>`
+    : [...node.children.values()]
+        .map((c, i) => nodeHtml({ ...c, key: `${node.key}/${i}` }, depth + 1, openPath))
+        .join("");
+
+  return `
+    <details class="tree-node tree-d${depth}"${isOpen}>
+      <summary>
+        <span class="tree-label">${esc(node.label)}</span>
+        ${totalsChips(node.totals)}
+      </summary>
+      <div class="tree-children">${inner}</div>
+    </details>`;
+}
+
+function sortChildren(node) {
+  if (!node.children) return node;
+  const sorted = [...node.children.entries()].sort((a, c) => {
+    const x = a[1].sort, y = c[1].sort;
+    return typeof x === "string" ? String(y).localeCompare(String(x)) : y - x;
+  });
+  node.children = new Map(sorted);
+  for (const child of node.children.values()) sortChildren(child);
+  return node;
+}
+
 async function loadHistory() {
   const items = await api("/api/briefings");
-  $("history-list").innerHTML = items.length
-    ? items
-        .map(
-          (b) => `
-      <li><button class="history-item" data-open="${b.id}">
-        <span>
-          <strong>${esc(b.title)}</strong><br />
-          <span class="tagline">${b.stats.cited} cited · ${b.stats.invented} invented ·
-          ${b.stats.accepted} accepted · ${b.stats.rejected} rejected</span>
-        </span>
-        <span class="badge badge-plain">${b.status}</span>
-      </button></li>`
-        )
-        .join("")
-    : `<li class="note-item"><div class="note-body">
-       <p class="note-text">No briefings saved yet.</p></div></li>`;
+  const el = $("history-list");
+
+  if (!items.length) {
+    el.innerHTML = `<div class="empty"><strong>No briefings yet</strong>
+      Generate one in the workspace, review the bullets, then save it. Saved briefings
+      are grouped here by year, month, week and day.</div>`;
+    return;
+  }
+
+  const years = groupBriefings(items);
+  const grand = items.reduce((t, b) => addTotals(t, b), emptyTotals());
+
+  // Expand the newest path so the view is useful without any clicking.
+  const openPath = ["y0", "y0/0", "y0/0/0", "y0/0/0/0"];
+
+  const tree = [...years.entries()]
+    .sort((a, c) => Number(c[0]) - Number(a[0]))
+    .map(([, y], i) => nodeHtml({ ...sortChildren(y), key: `y${i}` }, 0, openPath))
+    .join("");
+
+  el.innerHTML = `
+    <div class="tree-summary">
+      <div><strong>All time</strong></div>
+      ${totalsChips(grand)}
+    </div>
+    ${tree}`;
 }
 
 function setView(view) {
@@ -458,8 +616,9 @@ $("tab-history").addEventListener("click", () => setView("history"));
 
 (async function boot() {
   try {
-    const health = await api("/api/health");
-    $("composer-hint").textContent = `API up · provider: ${health.provider}`;
+    // Health check is kept as a liveness probe -- a failure here is what raises the
+    // "cannot reach the API" toast below -- but it is not surfaced in the UI.
+    await api("/api/health");
     await loadNotes();
 
     // Restore the most recent briefing so a page reload does not lose the work.

@@ -39,11 +39,14 @@ class Settings(BaseSettings):
 
     # --- generation shape ---
     target_bullets: int = 8
-    min_bullets: int = 4
+    min_bullets: int = 5
     # Roughly how much source text one honest bullet needs behind it. Used to cap
     # bullet count so thin notes cannot be padded out with invention.
+    # Note this is a backstop, not the primary defence -- verification already catches
+    # and labels invention. Set too high, a dense 100-character standup note yields a
+    # single bullet and the app feels broken; too low and the model is invited to pad.
     # See analysis.groundedness_budget().
-    chars_per_bullet: int = 100
+    chars_per_bullet: int = 65
 
     cors_origins: str = "http://localhost:5173,http://127.0.0.1:5173"
 

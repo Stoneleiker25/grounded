@@ -22,7 +22,8 @@ fi
 
 echo "window.GROUNDED_API = 'http://127.0.0.1:${API_PORT}';" > app/frontend/config.js
 
-"$PY" -m uvicorn app.backend.main:app --host 127.0.0.1 --port "$API_PORT" &
+# --reload: without it uvicorn holds the old code in memory after an edit.
+"$PY" -m uvicorn app.backend.main:app --host 127.0.0.1 --port "$API_PORT" --reload --reload-dir app &
 API_PID=$!
 "$PY" -m http.server "$WEB_PORT" --bind 127.0.0.1 --directory app/frontend >/dev/null 2>&1 &
 WEB_PID=$!

@@ -64,6 +64,48 @@ def build_user_prompt(notes: dict[int, tuple[str, str]], n_bullets: int) -> str:
     )
 
 
+BRIEFING_TOOL = {
+    "name": "submit_briefing",
+    "description": "Submit the finished briefing bullets, with evidence for each claim.",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "bullets": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "text": {
+                            "type": "string",
+                            "description": "The briefing bullet, one fact, plain English.",
+                        },
+                        "note_id": {
+                            "type": ["integer", "null"],
+                            "description": "Id of the note supporting this bullet, or null if invented.",
+                        },
+                        "quote": {
+                            "type": ["string", "null"],
+                            "description": (
+                                "VERBATIM span copied from that note's body, character for "
+                                "character. Null if invented. This is checked against the "
+                                "note text; a paraphrase will fail and the bullet will be "
+                                "downgraded to invented."
+                            ),
+                        },
+                        "invented": {
+                            "type": "boolean",
+                            "description": "True if this claim is not supported by any note.",
+                        },
+                    },
+                    "required": ["text", "invented"],
+                },
+            }
+        },
+        "required": ["bullets"],
+    },
+}
+
+
 class LLMProvider(Protocol):
     name: str
 
@@ -119,18 +161,51 @@ class AnthropicProvider:
         self.model = settings.anthropic_model
 
     def generate(self, notes: dict[int, tuple[str, str]], n_bullets: int) -> list[DraftBullet]:
-        resp = self._client.messages.create(
-            model=self.model,
-            max_tokens=settings.llm_max_tokens,
-            system=SYSTEM_PROMPT,
-            messages=[
-                {"role": "user", "content": build_user_prompt(notes, n_bullets)},
-                # Prefill forces the response to start as JSON.
-                {"role": "assistant", "content": "{"},
-            ],
-        )
-        body = "{" + "".join(b.text for b in resp.content if b.type == "text")
-        return _coerce(_extract_json(body))
+        """Ask for the briefing as a forced tool call.
+
+        Structured output via a tool schema rather than "please reply with JSON":
+        the shape is guaranteed by the API instead of by the model's willingness to
+        follow formatting instructions, which is the usual source of intermittent
+        parse failures. Assistant-prefill was tried first and rejected outright by
+        some models ("does not support assistant message prefill"), so it is not used.
+
+        If the tool path fails for any reason -- an older model, a transport quirk --
+        we fall back to a plain text request and recover the JSON from the body.
+        """
+        prompt = build_user_prompt(notes, n_bullets)
+        try:
+            resp = self._client.messages.create(
+                model=self.model,
+                max_tokens=settings.llm_max_tokens,
+                system=SYSTEM_PROMPT,
+                tools=[BRIEFING_TOOL],
+                tool_choice={"type": "tool", "name": BRIEFING_TOOL["name"]},
+                messages=[{"role": "user", "content": prompt}],
+            )
+            for block in resp.content:
+                if getattr(block, "type", None) == "tool_use":
+                    return _coerce(dict(block.input))
+            # Forced tool_choice should make this unreachable; fall through if not.
+            raise RuntimeError("model returned no tool_use block")
+        except Exception as tool_error:
+            try:
+                resp = self._client.messages.create(
+                    model=self.model,
+                    max_tokens=settings.llm_max_tokens,
+                    system=SYSTEM_PROMPT,
+                    messages=[{
+                        "role": "user",
+                        "content": prompt + "\n\nRespond with the raw JSON object only. "
+                                            "No prose, no markdown fence.",
+                    }],
+                )
+                body = "".join(b.text for b in resp.content if getattr(b, "type", None) == "text")
+                return _coerce(_extract_json(body))
+            except Exception as text_error:
+                raise RuntimeError(
+                    f"structured tool call failed ({tool_error}); "
+                    f"plain-text fallback also failed ({text_error})"
+                ) from text_error
 
 
 class EchoProvider:
